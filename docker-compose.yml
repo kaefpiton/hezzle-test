@@ -1,0 +1,50 @@
+version: "3.5"
+services:
+  postgres:
+    image: postgres:13.3
+    container_name: gamePostgres
+    volumes:
+      - /private/var/lib/postgresql:/var/lib/postgresql
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: pguser
+      POSTGRES_PASSWORD: pguser
+      POSTGRES_DB: pgdb
+
+  cache:
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - '6379:6379'
+
+  clickHouseServer:
+    image: yandex/clickhouse-server
+    ports:
+      - "8123:8123"
+      - "9000:9000"
+      - "9009:9009"
+
+    ulimits:
+      nproc: 65535
+      nofile:
+        soft: 262144
+        hard: 262144
+
+  ClickHouseClient:
+    image: yandex/clickhouse-client
+    command: [ '--host', 'server' ]
+
+  nats:
+    image: nats-streaming:latest
+    entrypoint:
+      - /nats-streaming-server
+      - -cid
+      - main_cluster
+    ports:
+      - "127.0.0.1:4222:4222"
+      - "127.0.0.1:6222:6222"
+      - "127.0.0.1:8222:8222"
+    restart: always
+    tty: true
+
