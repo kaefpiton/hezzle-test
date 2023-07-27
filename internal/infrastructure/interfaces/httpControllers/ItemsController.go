@@ -1,7 +1,6 @@
 package httpControllers
 
 import (
-	"context"
 	"errors"
 	"github.com/labstack/echo/v4"
 	"hezzle/internal/api"
@@ -24,7 +23,7 @@ type itemsController struct {
 	logger          logger.Logger
 }
 
-func NewItemsController(ctx context.Context, itemsInteractor interactors.ItemsInteractor, logger logger.Logger) ItemsController {
+func NewItemsController(itemsInteractor interactors.ItemsInteractor, logger logger.Logger) ItemsController {
 	return &itemsController{
 		itemsInteractor: itemsInteractor,
 		logger:          logger,

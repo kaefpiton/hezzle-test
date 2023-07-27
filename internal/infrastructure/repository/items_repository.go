@@ -141,7 +141,10 @@ func (r *ItemsRepository) Update(item *repository.ItemModel) (*repository.ItemMo
 	}
 	defer tx.Rollback()
 
-	tx.Exec("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ ")
+	_, err = tx.Exec("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ ")
+	if err != nil {
+		return nil, err
+	}
 
 	err = tx.QueryRow("SELECT EXISTS (SELECT id FROM items WHERE id = $1 AND campaign_id = $2)", item.Id, item.CampaignId).Scan(&isItemExist)
 	if err != nil {

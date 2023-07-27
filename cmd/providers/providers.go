@@ -60,7 +60,6 @@ func ProvideQueue(cnf *configs.Config) (queue.PubSub, error) {
 	return natsClient, nil
 }
 
-// todo config
 func ProvideClickhouse(cnf *configs.Config) *sql.DB {
 	conn := clickhouse.OpenDB(&clickhouse.Options{
 		Addr: []string{"127.0.0.1:9000"},
